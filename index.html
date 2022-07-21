@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Shouting page</title>
+    <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const shoutMsg = urlParams.get("msg") || "I love pizza!";
+    const useCounter = urlParams.get("counter") === "true";
+    const addHtml = urlParams.get("html") !== "false";
+    const useConsole = urlParams.get("console") !== "false";
+    const interval = parseInt(urlParams.get("interval") || "1", 10)
+    let counter = 1;
+
+    function addHtmlMsg(msg) {
+      const msgEl = document.createElement("p");
+      msgEl.innerHTML = msg;
+      document.body.append(msgEl);
+    }
+
+    function shout() {
+      let fullMsg = shoutMsg;
+      if (useCounter) {
+        fullMsg = `${shoutMsg} ${counter}`;
+      }
+      if (useConsole) {
+        console.log(fullMsg);
+      }
+      if (addHtml) {
+        addHtmlMsg(fullMsg);
+      }
+      counter += 1;
+    }
+
+    setInterval(shout, interval * 1000);
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
