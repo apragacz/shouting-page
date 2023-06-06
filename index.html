@@ -3,12 +3,24 @@
   <head>
     <title>Shouting page</title>
     <script>
+
+    function getBoolParam(params, name, defaultValue) {
+      const valueStr = params.get(name);
+      if (valueStr === "true") {
+        return true;
+      } else if (valueStr === "false") {
+        return false;
+      }
+      return defaultValue;
+    }
+
     const urlParams = new URLSearchParams(window.location.search);
     const shoutMsg = urlParams.get("msg") || "I love pizza!";
-    const useCounter = urlParams.get("counter") === "true";
-    const addHtml = urlParams.get("html") !== "false";
-    const useConsole = urlParams.get("console") !== "false";
-    const interval = parseInt(urlParams.get("interval") || "1", 10)
+    const useCounter = getBoolParam(urlParams, "counter", false);
+    const addHtml = getBoolParam(urlParams, "html", true);
+    const useConsole = getBoolParam(urlParams, "console", true);
+    const interval = parseFloat(urlParams.get("interval") || "1");
+    const stopAt = urlParams.get("stopAt") !== null ? parseInt(urlParams.get("stopAt"), 10) : null;
     let counter = 1;
 
     function addHtmlMsg(msg) {
@@ -29,11 +41,31 @@
         addHtmlMsg(fullMsg);
       }
       counter += 1;
-    }
 
-    setInterval(shout, interval * 1000);
+      if (stopAt !== null && counter > stopAt) {
+        return false;
+      }
+      return true;
+    }
     </script>
   </head>
   <body>
+    <script>
+    let intervalHandler;
+
+    function shoutIntervalWrapper(){
+      const result = shout();
+      if (!result) {
+        clearInterval(intervalHandler);
+      }
+      return result;
+    }
+
+    if (interval === 0.0 && stopAt !== null) {
+      while(shout());
+    } else {
+      intervalHandler = setInterval(shoutIntervalWrapper, interval * 1000);
+    }
+    </script>
   </body>
 </html>

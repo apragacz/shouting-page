@@ -13,3 +13,4 @@ Available HTTP query params
 | `html` | if `true`, then add html elements | `true` |
 | `console` | if `true`, then write to `console.log` | `true` |
 | `interval` | interval, in seconds | `1` |
+| `stopAt` | if set, stop the counter at given (integer) value | `null` |
